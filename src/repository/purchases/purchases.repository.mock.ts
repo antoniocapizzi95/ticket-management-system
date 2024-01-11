@@ -9,9 +9,10 @@ export class PurchaseRepositoryMock implements PurchasesRepository {
     this.purchasesInMemory = [];
   }
 
-  addPurchase (purchase: Purchase): void {
+  addPurchase (purchase: Purchase): number {
     purchase.id = this.assignId();
     this.purchasesInMemory.push(purchase);
+    return purchase.id
   }
 
   async getPurchasesByUser (userId: number): Promise<Purchase[]> {

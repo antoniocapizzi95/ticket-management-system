@@ -6,12 +6,15 @@ import { EventsService } from './services/events.service';
 import { EventsRepositoryMock } from './repository/events/events.repository.mock';
 import { PurchasesController } from './controllers/purchases.controller';
 import { EventsController } from './controllers/events.controller';
+import { UsersRepositoryMock } from './repository/users/users.repository.mock';
 
 export function initializeRoutes(app: Express) {
 
     // initializing purchase service injecting implemented repositories
     const purchasesService = new PurchasesService(
         new PurchaseRepositoryMock(),
+        new UsersRepositoryMock(),
+        new EventsRepositoryMock(),
         new NotificationRepositoryEmail()
     );
 
