@@ -1,5 +1,5 @@
 export class Purchase {
-    constructor(public id: number | undefined, public userId: number, public eventsToPurchase: EventToPurchase[], public purchaseDateTime: Date, public paidPrice: number) {}
+    constructor(public id: number | undefined, public userId: number, public eventsToPurchase: EventToPurchase[], public purchaseDateTime: Date | undefined, public paidPrice: number) {}
 }
 
 export class EventToPurchase {

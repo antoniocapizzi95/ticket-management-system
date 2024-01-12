@@ -10,11 +10,13 @@ import { UsersRepositoryMock } from './repository/users/users.repository.mock';
 
 export function initializeRoutes(app: Express) {
 
+    const eventsRepo = new EventsRepositoryMock();
+
     // initializing purchase service injecting implemented repositories
     const purchasesService = new PurchasesService(
         new PurchaseRepositoryMock(),
         new UsersRepositoryMock(),
-        new EventsRepositoryMock(),
+        eventsRepo,
         new NotificationRepositoryEmail()
     );
 
@@ -22,7 +24,7 @@ export function initializeRoutes(app: Express) {
     const purchasesController = new PurchasesController(purchasesService);
     
     // initializing events service injecting implemented repositoriy
-    const eventsService = new EventsService(new EventsRepositoryMock())
+    const eventsService = new EventsService(eventsRepo);
 
     // initializing events controller injecting service
     const eventsController = new EventsController(eventsService);
