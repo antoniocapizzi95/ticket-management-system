@@ -3,7 +3,7 @@ import { EventsService } from "../services/events.service";
 
 
 export class EventsController {
-  private eventsService: EventsService;
+  private readonly eventsService: EventsService;
 
   constructor(eventsService: EventsService) {
     this.eventsService = eventsService;
@@ -14,8 +14,7 @@ export class EventsController {
       const events = await this.eventsService.getEventsList();
       res.json({ availableEvents: events });
     } catch (error) {
-      console.error("Error getting events:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: error.message });
     }
   }
 }

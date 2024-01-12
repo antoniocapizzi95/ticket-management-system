@@ -3,7 +3,7 @@ import { Event } from "../models/event.model";
 
 export class EventsService {
   // using interface types as repository
-  private eventsRepository: EventsRepository;
+  private readonly eventsRepository: EventsRepository;
 
   constructor(
     eventsRepository: EventsRepository

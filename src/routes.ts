@@ -17,7 +17,8 @@ export function initializeRoutes(app: Express) {
         new PurchaseRepositoryMock(),
         new UsersRepositoryMock(),
         eventsRepo,
-        new NotificationRepositoryEmail()
+        new NotificationRepositoryEmail(),
+        parseInt(process.env.MAX_TICKETS_PER_EVENT, 10) || 3
     );
 
     // initializing purchases controller injecting service
