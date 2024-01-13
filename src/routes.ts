@@ -1,5 +1,5 @@
 import { Express, Request, Response } from 'express';
-import { PurchaseRepositoryMock } from './repository/purchases/purchases.repository.mock';
+import { PurchasesRepositoryMock } from './repository/purchases/purchases.repository.mock';
 import { NotificationRepositoryEmail } from './repository/notification/notification.repository.email';
 import { PurchasesService } from './services/purchases.service';
 import { EventsService } from './services/events.service';
@@ -14,7 +14,7 @@ export function initializeRoutes(app: Express) {
 
     // initializing purchase service injecting implemented repositories
     const purchasesService = new PurchasesService(
-        new PurchaseRepositoryMock(),
+        new PurchasesRepositoryMock(),
         new UsersRepositoryMock(),
         eventsRepo,
         new NotificationRepositoryEmail(),

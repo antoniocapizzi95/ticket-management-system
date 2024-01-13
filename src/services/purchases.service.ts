@@ -1,5 +1,5 @@
 import { NotificationRepository } from "../repository/notification/notification.repository";
-import { Purchase } from "../models/purchase.model";
+import { Purchase, EventToPurchase } from "../models/purchase.model";
 import { Event } from "../models/event.model";
 import { PurchasesRepository } from "../repository/purchases/purchases.repository";
 import { UsersRepository } from "../repository/users/users.repository";
@@ -40,6 +40,10 @@ export class PurchasesService {
   
       if (!user) {
         throw new PurchaseError('Selected user does not exist');
+      }
+
+      if (this.checkDuplicatedEvents(purchaseData.eventsToPurchase)) {
+        throw new PurchaseError('The events to purchase cannot be duplicated');
       }
   
       const involvedEvents: Event[] = [];
@@ -103,7 +107,7 @@ export class PurchasesService {
     });
   }
 
-  protected isPaidPriceCorrect (purchase: Purchase, involvedEvents: Event[]): boolean {
+  private isPaidPriceCorrect (purchase: Purchase, involvedEvents: Event[]): boolean {
     const paidPrice = purchase.paidPrice;
     let correctSum = 0;
     for (const purchasedEvent of purchase.eventsToPurchase) {
@@ -114,6 +118,19 @@ export class PurchasesService {
       }
     }
     return correctSum === paidPrice;
+  }
+
+  private checkDuplicatedEvents (eventsToPurchase: EventToPurchase[]): boolean {
+    const ids = new Set();
+  
+    return eventsToPurchase.some(obj => {
+      if (ids.has(obj.eventId)) {
+        return true;
+      } else {
+        ids.add(obj.eventId);
+        return false;
+      }
+    });
   }
 
 }

@@ -2,7 +2,7 @@ import { Purchase } from "../../models/purchase.model";
 import { PurchasesRepository } from "./purchases.repository";
 
 
-export class PurchaseRepositoryMock implements PurchasesRepository {
+export class PurchasesRepositoryMock implements PurchasesRepository {
   private purchasesInMemory: Purchase[];
 
   constructor() {
