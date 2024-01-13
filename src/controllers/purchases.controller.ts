@@ -2,6 +2,7 @@ import express from "express";
 import { PurchasesService } from "../services/purchases.service";
 import { Purchase } from "../models/purchase.model";
 import { PurchaseError } from "../errors/purchase.error";
+import { isPurchaseObjectValidated } from "./validators/purchase.validation";
 
 
 export class PurchasesController {
@@ -13,6 +14,11 @@ export class PurchasesController {
 
   async purchase(req: express.Request, res: express.Response) {
     const purchase: Purchase = req.body;
+
+    if (!isPurchaseObjectValidated(purchase)) {
+      res.status(400).json({ success: false, error: 'Body object it\'s not valid' });
+      return
+    }
   
     try {
       await this.purchasesService.purchase(purchase);
