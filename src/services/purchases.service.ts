@@ -45,31 +45,10 @@ export class PurchasesService {
       if (this.checkDuplicatedEvents(purchaseData.eventsToPurchase)) {
         throw new PurchaseError('The events to purchase cannot be duplicated');
       }
-  
-      const involvedEvents: Event[] = [];
-      for (const eventToPurchase of purchaseData.eventsToPurchase) {
-        const event = await this.eventsRepository.getEventById(eventToPurchase.eventId);
-  
-        if (!event) {
-          throw new PurchaseError(`Event with id ${event.id} does not exist`);
-        }
-  
-        if (eventToPurchase.ticketsNumber > this.maxTicketsPerEvent) {
-          throw new PurchaseError(`Impossible to purchase more than ${this.maxTicketsPerEvent} tickets per event`);
-        }
-  
-        if (eventToPurchase.ticketsNumber > event.availableTickets) {
-          throw new PurchaseError(`Insufficient tickets for the event ${event.name} with id ${event.id}`);
-        }
-  
-        involvedEvents.push(event);
-      }
-  
-      if (!this.isPaidPriceCorrect(purchaseData, involvedEvents)) {
-        throw new PurchaseError('The paid price is incorrect');
-      }
-  
-      await this.decreaseAvailableTickets(purchaseData, involvedEvents);
+
+      const involvedEvents: Event[] = await this.checkPurchaseValidity(purchaseData);
+
+      await this.decreaseAvailableTickets(purchaseData.eventsToPurchase, involvedEvents);
   
       // Release mutex at the end of the operation
       release();
@@ -97,15 +76,46 @@ export class PurchasesService {
     return purchases;
   }
 
-  private async decreaseAvailableTickets (purchase: Purchase, involvedEvents: Event[]) {
+  private async decreaseAvailableTickets (eventsToPurchase: EventToPurchase[], involvedEvents: Event[]) {
     involvedEvents.forEach(async (event) => {
-      const eventToPurchase = purchase.eventsToPurchase.find((evt) => evt.eventId === event.id);
+      const eventToPurchase = eventsToPurchase.find((evt) => evt.eventId === event.id);
       if (eventToPurchase) {
         event.availableTickets = event.availableTickets - eventToPurchase.ticketsNumber;
         await this.eventsRepository.update(event.id, event);
       }
     });
   }
+
+  // Method to check the purchase validity, it returns the list of involved events to avoid too many repository calls to retrieve events
+  private async checkPurchaseValidity (purchase: Purchase): Promise<Event[]> {
+    const involvedEvents: Event[] = [];
+      for (const eventToPurchase of purchase.eventsToPurchase) {
+        const event = await this.eventsRepository.getEventById(eventToPurchase.eventId);
+  
+        if (!event) {
+          throw new PurchaseError(`Event with id ${event.id} does not exist`);
+        }
+  
+        if (eventToPurchase.ticketsNumber > this.maxTicketsPerEvent) {
+          throw new PurchaseError(`Impossible to purchase more than ${this.maxTicketsPerEvent} tickets per event`);
+        }
+  
+        if (eventToPurchase.ticketsNumber > event.availableTickets) {
+          throw new PurchaseError(`Insufficient tickets for the event ${event.name} with id ${event.id}`);
+        }
+
+        if (this.isEventDatePassed(event.eventDate)) {
+          throw new PurchaseError(`The event ${event.name} with id ${event.id} has already taken place`);
+        }
+  
+        involvedEvents.push(event);
+      }
+
+      if (!this.isPaidPriceCorrect(purchase, involvedEvents)) {
+        throw new PurchaseError('The paid price is incorrect');
+      }
+      return involvedEvents;
+  } 
 
   private isPaidPriceCorrect (purchase: Purchase, involvedEvents: Event[]): boolean {
     const paidPrice = purchase.paidPrice;
@@ -131,6 +141,11 @@ export class PurchasesService {
         return false;
       }
     });
+  }
+
+  private isEventDatePassed(eventDate: Date): boolean {
+    const currentDate = new Date();
+    return eventDate < currentDate;
   }
 
 }

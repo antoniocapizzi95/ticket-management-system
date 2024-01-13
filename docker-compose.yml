@@ -1,0 +1,7 @@
+version: '3'
+services:
+  ticket-management-system-api:
+    container_name: ticket-management-system-api
+    build: .
+    ports:
+      - "5000:5000"
