@@ -7,7 +7,8 @@ export class EventsRepositoryMock implements EventsRepository {
     constructor () {
         this.eventsInMemory = [
             { id: 1, name: 'event1', availableTickets: 200, ticketPrice: 50, eventDate: new Date('2024-06-01'), location: 'Milan' },
-            { id: 2, name: 'event2', availableTickets: 100, ticketPrice: 40, eventDate: new Date('2024-07-12'), location: 'Turin' }
+            { id: 2, name: 'event2', availableTickets: 100, ticketPrice: 40, eventDate: new Date('2024-07-12'), location: 'Turin' },
+            { id: 3, name: 'event3', availableTickets: 5, ticketPrice: 30, eventDate: new Date('2023-12-01'), location: 'Rome' }
         ];
     }
     

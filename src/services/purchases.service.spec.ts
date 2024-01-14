@@ -89,6 +89,18 @@ describe('PurchasesService', () => {
     await expect(purchasesService.purchase(purchaseData)).rejects.toThrow('The paid price is incorrect');
   });
 
+  test('purchase method throws PurchaseError for for event already passed', async () => {
+    const purchaseData = {
+        userId: 2,
+        eventsToPurchase: [{ eventId: 3, ticketsNumber: 2 }], // Old event
+        paidPrice: 60, 
+        id: undefined,
+        purchaseDateTime: undefined
+      };
+
+    await expect(purchasesService.purchase(purchaseData)).rejects.toThrow();
+  });
+
   test('getByUser method returns purchases for existing user', async () => {
     const userId = '1';
 
