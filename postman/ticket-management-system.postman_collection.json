@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "48389d7c-0cc2-405e-a156-80a25e50e4a0",
+		"name": "ticket-management-system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9669684",
+		"_collection_link": "https://red-flare-7491.postman.co/workspace/personal~42e9541e-707a-40fb-bab7-19602c374b8c/collection/9669684-48389d7c-0cc2-405e-a156-80a25e50e4a0?action=share&source=collection_link&creator=9669684"
+	},
+	"item": [
+		{
+			"name": "get events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "purchase",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 1,\r\n    \"eventsToPurchase\": [\r\n        {\r\n            \"eventId\": 1,\r\n            \"ticketsNumber\": 1\r\n        }\r\n    ],\r\n    \"paidPrice\":50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/purchase",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "purchases per user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/purchase/user/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"purchase",
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
