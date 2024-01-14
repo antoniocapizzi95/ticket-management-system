@@ -24,12 +24,11 @@ export class PurchasesController {
       await this.purchasesService.purchase(purchase);
       res.status(201).json({ success: true });
     } catch (error) {
-  
       if (error instanceof PurchaseError) {
         res.status(400).json({ success: false, error: error.message });
-      } else {
-        res.status(500).json({ success: false, error: error.message });
+        return
       }
+      res.status(500).json({ success: false, error: error.message });
     }
   }
 
@@ -40,10 +39,10 @@ export class PurchasesController {
       res.json({ purchases: purchasesByUserId });
     } catch (error) {
       if (error instanceof PurchaseError) {
-        res.status(400).json({ success: false, error: error.message });
-      } else {
-        res.status(500).json({ error: error.message });
+        res.status(400).json({ error: error.message });
+        return
       }
+      res.status(500).json({ error: error.message });
     }
   }
 }
