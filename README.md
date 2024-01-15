@@ -107,6 +107,8 @@ This endpoint allows users to purchase tickets for events.
 
     ```paidPrice```: is the amount paid for the entire transaction, it must be consistent with the ticket price of each event and the number of tickets. It is assumed that the payment transaction took place on the front-end, then the paid amount is passed to the back-end (which will be checked to see if it is correct).
 
+    If the transaction was successful, a notification is sent to the user at the end (the notification is simulated, only a log is printed).
+
     Please note: if you try to purchase some tickets for a passed event, the transaction will be refused. This endpoint has a transactional logic, if one part of the request is incorrect, the entire purchase fails.
 
 - **Success Response:**
