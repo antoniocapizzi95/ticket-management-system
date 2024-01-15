@@ -111,6 +111,8 @@ This endpoint allows users to purchase tickets for events.
 
     Please note: if you try to purchase some tickets for a passed event, the transaction will be refused. This endpoint has a transactional logic, if one part of the request is incorrect, the entire purchase fails.
 
+    ATTENTION: if the paidPrice field does not report the price coherent with the events purchased (and the number of tickets purchased), the request will fail (this behaviour was added just to give a little more logic to the design).
+
 - **Success Response:**
 
     - **Code: 201 Created**
